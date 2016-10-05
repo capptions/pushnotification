@@ -9,55 +9,28 @@ type message struct {
 	GCM         string `json:"GCM"`
 }
 
-type iosPush struct {
-	APS iosAps `json:"aps"`
-}
-
-type iosAps struct {
-	Alert iosAlert `json:"alert,omitempty"`
-	Sound *string  `json:"sound,omitempty"`
-	Badge *int     `json:"badge,omitempty"`
-}
-
-type iosAlert struct {
-	Body  *string `json:"body,omitempty"`
-	Title *string `json:"title,omitempty"`
-}
-
-type gcmPush struct {
-	Message *string     `json:"message,omitempty"`
-	Title   *string     `json:"title,omitempty"`
-	Custom  interface{} `json:"custom"`
-	Badge   *int        `json:"badge,omitempty"`
-}
-
-type gcmPushWrapper struct {
-	Data gcmPush `json:"data"`
-}
-
 func newMessageJSON(data *Data) (m string, err error) {
-	b, err := json.Marshal(iosPush{
-		APS: iosAps{
-			Alert: iosAlert{
-				Body:  data.Alert,
-				Title: data.Subject,
+	b, err := json.Marshal(map[string]interface{}{
+		"aps": enrich(map[string]interface{}{
+			"alert": map[string]interface{}{
+				"body":  data.Alert,
+				"title": data.Subject,
 			},
-			Sound: data.Sound,
-			Badge: data.Badge,
-		},
+			"sound": data.Sound,
+			"badge": data.Badge,
+		}, data.Data),
 	})
 	if err != nil {
 		return
 	}
 	payload := string(b)
 
-	b, err = json.Marshal(gcmPushWrapper{
-		Data: gcmPush{
-			Message: data.Alert,
-			Custom:  data.Data,
-			Badge:   data.Badge,
-			Title:   data.Subject,
-		},
+	b, err = json.Marshal(map[string]interface{}{
+		"data": enrich(map[string]interface{}{
+			"message": data.Alert,
+			"badge":   data.Badge,
+			"title":   data.Subject,
+		}, data.Data),
 	})
 	if err != nil {
 		return
@@ -75,4 +48,11 @@ func newMessageJSON(data *Data) (m string, err error) {
 	}
 	m = string(pushData)
 	return
+}
+
+func enrich(message map[string]interface{}, custom map[string]interface{}) map[string]interface{} {
+	for key, value := range custom {
+		message[key] = value
+	}
+	return message
 }

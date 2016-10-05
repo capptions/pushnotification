@@ -36,11 +36,11 @@ func (device *Device) IsCreated() bool {
 
 // Data is the data of the sending pushnotification.
 type Data struct {
-	Alert   *string     `json:"alert,omitempty"`
-	Subject *string     `json:"subject,omitempty"`
-	Sound   *string     `json:"sound,omitempty"`
-	Data    interface{} `json:"custom_data"`
-	Badge   *int        `json:"badge,omitempty"`
+	Alert   *string                `json:"alert,omitempty"`
+	Subject *string                `json:"subject,omitempty"`
+	Sound   *string                `json:"sound,omitempty"`
+	Badge   *int                   `json:"badge,omitempty"`
+	Data    map[string]interface{} `json:"custom_data"`
 }
 
 // Send sends a push notification
@@ -81,7 +81,7 @@ func (service *Service) pushToDevice(svc *sns.SNS, device *Device, subject strin
 		MessageStructure: aws.String("json"),
 		TargetArn:        aws.String(device.EndpointArn),
 	}
-	
+
 	if subject != "" {
 		input.Subject = aws.String(subject)
 	}

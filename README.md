@@ -52,6 +52,13 @@ func main() {
 		Alert:   aws.String("Nice test message"),
 		Sound:   aws.String("default"),
 		Badge:   aws.Int(1),
+		Data: map[string]interface{}{
+			"entity": "57cd5acb3b983b0b00bdabf7",
+			"topic":  "Nice topic",
+			"data": map[string]interface{}{
+				"evenmore": "568cef4ca041160a00911dd6",
+			},
+		},
 	})
 	if err != nil {
 		log.Fatal(err)
