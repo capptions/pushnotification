@@ -16,8 +16,9 @@ func newMessageJSON(data *Data) (m string, err error) {
 				"body":  data.Alert,
 				"title": data.Subject,
 			},
-			"sound": data.Sound,
-			"badge": data.Badge,
+			"sound":             data.Sound,
+			"badge":             data.Badge,
+			"content-available": 1,
 		}, data.Data),
 	})
 	if err != nil {
@@ -27,9 +28,9 @@ func newMessageJSON(data *Data) (m string, err error) {
 
 	b, err = json.Marshal(map[string]interface{}{
 		"data": enrich(map[string]interface{}{
-			"message": data.Alert,
-			"badge":   data.Badge,
-			"title":   data.Subject,
+			"message":           data.Alert,
+			"badge":             data.Badge,
+			"title":             data.Subject
 		}, data.Data),
 	})
 	if err != nil {
