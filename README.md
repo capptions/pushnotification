@@ -17,7 +17,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/changer/pushnotification"
+	"github.com/capptions/pushnotification"
 	"github.com/aws/aws-sdk-go/aws"
 	"github.com/joho/godotenv"
 )

@@ -36,11 +36,11 @@ func (device *Device) IsCreated() bool {
 
 // Data is the data of the sending pushnotification.
 type Data struct {
-	Alert   *string                `json:"alert,omitempty"`
-	Subject *string                `json:"subject,omitempty"`
-	Sound   *string                `json:"sound,omitempty"`
-	Badge   *int                   `json:"badge,omitempty"`
-	Data    map[string]interface{} `json:"custom_data"`
+	Alert           *string                `json:"alert,omitempty"`
+	Subject         *string                `json:"subject,omitempty"`
+	Sound           *string                `json:"sound,omitempty"`
+	Badge           *int                   `json:"badge,omitempty"`
+	Data            map[string]interface{} `json:"custom_data"`
 }
 
 // Send sends a push notification
