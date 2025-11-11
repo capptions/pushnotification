@@ -26,13 +26,17 @@ func newMessageJSON(data *Data) (m string, err error) {
 	}
 	payload := string(b)
 
-	b, err = json.Marshal(map[string]interface{}{
-		"data": enrich(map[string]interface{}{
-			"message": data.Alert,
-			"badge":   data.Badge,
-			"title":   data.Subject,
-		}, data.Data),
-	})
+	// GCM/FCM requires notification object for display, and separate data object for custom data
+	gcmPayload := map[string]interface{}{
+		"priority": "high",
+		"notification": map[string]interface{}{
+			"title": data.Subject,
+			"body":  data.Alert,
+		},
+		"data": data.Data, // Only custom data goes here, not title/message/badge
+	}
+
+	b, err = json.Marshal(gcmPayload)
 	if err != nil {
 		return
 	}
